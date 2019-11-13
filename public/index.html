@@ -1,0 +1,230 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<link rel="shortcut icon" href="https://www.okta.com/sites/all/themes/developer/favicon.ico" type="image/vnd.microsoft.icon" />
+
+		<title>set up your Okta tenant for API center</title>
+
+		<link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/starter-template/">
+
+		<!-- Bootstrap core CSS -->
+		<link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+		<!-- Custom styles for this template -->
+		<link href="https://getbootstrap.com/docs/4.0/examples/starter-template/starter-template.css" rel="stylesheet">
+
+		<script
+			src="https://code.jquery.com/jquery-3.4.1.js"
+			integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+			crossorigin="anonymous"></script>
+
+
+	<script>
+
+	function submit_form() {
+
+		var fields = ["okta_api_token", "okta_base_url", "okta_org_name", "redirect_uri"]
+
+		var vals = {}
+
+		var user_provided_all_vals = true
+
+		for (var i = fields.length - 1; i >= 0; i--) {
+			if ($("#" + fields[i]).val() == "") {
+				$("#user_msg").html("<span style='color:red'>the " + fields[i] + " cannot be empty</span>")
+				user_provided_all_vals = false
+				break
+			}
+			else {
+				vals[fields[i]] = $("#" + fields[i]).val()
+			}
+		}
+
+		if (user_provided_all_vals) {
+
+			$("#user_msg").html("working...")
+
+			$.post( "/apply", vals, function( data ) {
+				console.dir(data)
+
+				var user_msg = ""
+
+				if (data.hasOwnProperty('error_msg')) {
+					if (data.error === 'api_token_error') {
+
+						user_msg += "<p style='color:red'>" + data.error_msg + "</p>"
+						user_msg += "<p>url: " + data.url + "</p>"
+						user_msg += "<p>api_token: " + data.okta_api_token + "</p>"
+
+						$("#user_msg").html(user_msg)
+					}
+					else if (data.error === 'terraform_error') {
+
+						console.log(data.error_msg)
+						user_msg += "<p>Sorry, there was a terraform error, and I can't recover from that. Please see the console for the error message.</p>"
+						$("#user_msg").html(user_msg)
+					}
+				}
+				else {
+
+					user_msg = "<span style='color:green'>SUCCESS! This is the terraform .tfstate object.</span>"
+
+					$("#user_msg").html(user_msg)
+
+					$("#copyButton").show()
+
+					$("#tfstate").html("<pre>" + JSON.stringify(data.body, null, 3) + "</pre>")
+				}
+			})
+		}
+	}
+
+	</script>
+
+
+	</head>
+
+	<body>
+
+		<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+			<a class="navbar-brand" href="#">okta API AM setup</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item">
+						<a class="nav-link" target="_blank" href="https://github.com/tom-smith-okta/okta-api-center">Okta API Center</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+
+		<main role="main" class="container">
+
+				<div class="row">
+					<div class="col-4" style="text-align: left">
+
+						<h2>Okta API AM setup</h2>
+
+						<p>This tool will use Terraform to set up your Okta tenant with the users, groups, scopes, and policies that correspond with the scenario described in the <a href="https://github.com/tom-smith-okta/okta-api-center">Okta API Center</a>. You should start there, if you have not been there already.</p>
+
+						<p>This tool is not an official Okta tool, and is not officially supported.</p>
+
+						<h3>How it works (please read!)</h3>
+
+						<p>When you submit the form (via https), a back-end service will use Terraform to create all of the relevant objects in your Okta tenant (see the example Terraform plan below).</p>
+
+						<p>You may want to take a moment to review the Terraform plan to ensure that none of the created objects will conflict with an object that already exists in your Okta tenant.</p>
+
+						<p>If all goes well, the service will return a Terraform state object indicating the objects that it has created in your tenant.</p>
+
+						<p><b><i>Please note that this tool can only be used <u>once</u>. It cannot be used as an ongoing Terraform interface.</i></b></p>
+
+						<p>You can of course use Terraform directly to manage your objects and tenant moving forward.</p>
+
+					</div>
+
+					<div class="col-8">
+
+						<form action = "" method = "">
+
+						<p>
+							okta org name: https:// <input type="text" name="okta_org_name" value="dev-638451" id="okta_org_name">
+							.
+							<select name="okta_base_url" id="okta_base_url">
+								<option value="okta.com" selected="selected">okta.com</option>
+								<option value="oktapreview.com">oktapreview.com</option>
+								<option value="okta-emea.com">okta-emea.com</option>
+							</select>
+						</p>
+
+						<p>okta api token: <input type = "text" name = "okta_api_token" id="okta_api_token" autocomplete="off"></p>
+
+						<p>redirect_uri: <input type = "text" id="redirect_uri" value="http://localhost:8080"></p>
+
+						</form>
+
+						<button onclick="submit_form()">submit</button>
+
+						<hr width="50%">
+						<div>
+							<p>A couple other notes:
+								<ul>
+									<li>The service will not store your API token. Again, this is a <i>one-time use</i> tool.</li>
+									<li>The redirect_uri will be used in creating the OIDC client in Okta. You can change it later in Okta if you wish.</li>
+						</div>
+
+						<div id="user_msg"></div>
+						<button id='copyButton' style="display: none; margin-top: 10px; margin-bottom: 10px">copy</button>
+						<div id="tfstate"></div>
+
+					</div>
+
+		</main><!-- /.container -->
+
+	<script>
+	document.getElementById("copyButton").addEventListener("click", function() {
+			copyToClipboard(document.getElementById("tfstate"));
+	});
+
+	function copyToClipboard(elem) {
+			// create hidden text element, if it doesn't already exist
+			var targetId = "_hiddenCopyText_";
+			var isInput = elem.tagName === "INPUT" || elem.tagName === "TEXTAREA";
+			var origSelectionStart, origSelectionEnd;
+			if (isInput) {
+					// can just use the original source element for the selection and copy
+					target = elem;
+					origSelectionStart = elem.selectionStart;
+					origSelectionEnd = elem.selectionEnd;
+			} else {
+					// must use a temporary form element for the selection and copy
+					target = document.getElementById(targetId);
+					if (!target) {
+							var target = document.createElement("textarea");
+							target.style.position = "absolute";
+							target.style.left = "-9999px";
+							target.style.top = "0";
+							target.id = targetId;
+							document.body.appendChild(target);
+					}
+					target.textContent = elem.textContent;
+			}
+			// select the content
+			var currentFocus = document.activeElement;
+			target.focus();
+			target.setSelectionRange(0, target.value.length);
+			
+			// copy the selection
+			var succeed;
+			try {
+					succeed = document.execCommand("copy");
+			} catch(e) {
+					succeed = false;
+			}
+			// restore original focus
+			if (currentFocus && typeof currentFocus.focus === "function") {
+					currentFocus.focus();
+			}
+			
+			if (isInput) {
+					// restore prior selection
+					elem.setSelectionRange(origSelectionStart, origSelectionEnd);
+			} else {
+					// clear temporary content
+					target.textContent = "";
+			}
+			return succeed;
+	}
+	</script>
+
+	 </body>
+</html>
