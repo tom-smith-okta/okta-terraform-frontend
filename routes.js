@@ -34,7 +34,7 @@ module.exports = function (app) {
 			}
 
 			var options = {
-				uri: process.env.tf_backend + '/apply',
+				uri: process.env.TF_BACKEND + '/apply',
 				method: 'POST',
 				json: req.body
 			}
