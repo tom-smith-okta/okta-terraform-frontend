@@ -112,7 +112,7 @@
 		<main role="main" class="container">
 
 				<div class="row">
-					<div class="col-4" style="text-align: left">
+					<div class="col-6" style="text-align: left">
 
 						<h2>Okta API AM setup</h2>
 
@@ -122,19 +122,19 @@
 
 						<h3>How it works (please read!)</h3>
 
-						<p>When you submit the form (via https), a back-end service will use Terraform to create all of the relevant objects in your Okta tenant (see the example Terraform plan below).</p>
+						<p>When you submit the form, a back-end service will use Terraform to create all of the relevant objects in your Okta tenant. Click <a target="_blank" href="terraform_config.html">here</a> to see the Terraform configuration file that will be applied.</p>
 
-						<p>You may want to take a moment to review the Terraform plan to ensure that none of the created objects will conflict with an object that already exists in your Okta tenant.</p>
+						<p>You may want to take a moment to review the Terraform configuration to ensure that none of the created objects will conflict with an object that already exists in your Okta tenant. If Terraform sees that an object already exists, it will throw an error.</p>
 
 						<p>If all goes well, the service will return a Terraform state object indicating the objects that it has created in your tenant.</p>
 
 						<p><b><i>Please note that this tool can only be used <u>once</u>. It cannot be used as an ongoing Terraform interface.</i></b></p>
 
-						<p>You can of course use Terraform directly to manage your objects and tenant moving forward.</p>
+						<p>Once you have the terraform state, you can of course use Terraform directly to manage your objects and tenant moving forward.</p>
 
 					</div>
 
-					<div class="col-8">
+					<div class="col-6">
 
 						<form action = "" method = "">
 
