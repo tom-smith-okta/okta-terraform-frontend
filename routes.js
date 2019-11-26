@@ -45,10 +45,16 @@ module.exports = function (app) {
 
 				if (!error && response.statusCode == 200) {
 
-					// var response_obj = {}
+					if (body.hasOwnProperty('terraform_error')) {
 
-					// response_obj.msg = 'terraform_success'
-					// response_obj.body = body
+						res.json(body)
+						return
+					}
+
+					var response_obj = {}
+
+					response_obj.msg = 'terraform_success'
+					response_obj.body = body
 
 					res.json(body)
 
