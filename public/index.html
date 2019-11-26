@@ -75,13 +75,13 @@
 
 					user_msg = "<span style='color:green'>SUCCESS! This is the terraform .tfstate object.</span>"
 
-					user_msg = "<p><i>please note that a client secret is included in this object.</i></p>"
+					user_msg += "<p><i>please note that a client secret is included in this object.</i></p>"
 
 					$("#user_msg").html(user_msg)
 
 					$("#copyButton").show()
 
-					$("#tfstate").html("<pre>" + JSON.stringify(data.body, null, 3) + "</pre>")
+					$("#tfstate").html("<pre>" + JSON.stringify(data, null, 3) + "</pre>")
 				}
 			})
 		}
