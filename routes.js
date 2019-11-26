@@ -47,7 +47,7 @@ module.exports = function (app) {
 
 					var response_obj = {}
 
-					response_obj.msg = 'terraform_success'
+					// response_obj.msg = 'terraform_success'
 					response_obj.body = body
 
 					res.json(response_obj)
