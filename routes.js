@@ -45,12 +45,12 @@ module.exports = function (app) {
 
 				if (!error && response.statusCode == 200) {
 
-					var response_obj = {}
+					// var response_obj = {}
 
 					// response_obj.msg = 'terraform_success'
-					response_obj.body = body
+					// response_obj.body = body
 
-					res.json(response_obj)
+					res.json(body)
 
 					return
 				}
