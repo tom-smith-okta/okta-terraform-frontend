@@ -111,64 +111,67 @@
 
 		<main role="main" class="container">
 
-				<div class="row">
-					<div class="col-6" style="text-align: left">
+			<div class="row">
+				<div class="col-6" style="text-align: left">
 
-						<h2>Okta API AM setup</h2>
+					<h2>Okta API AM setup</h2>
 
-						<p>This tool will use Terraform to set up your Okta tenant with the users, groups, scopes, and policies that correspond with the scenario described in the <a href="https://github.com/tom-smith-okta/okta-api-center">Okta API Center</a>. You should start there, if you have not been there already.</p>
+					<p>This tool will use Terraform to set up your Okta tenant with the users, groups, scopes, and policies that correspond with the scenario described in the <a href="https://github.com/tom-smith-okta/okta-api-center">Okta API Center</a>. You should start there, if you have not been there already.</p>
 
-						<p>This tool is not an official Okta tool, and is not officially supported.</p>
+					<p>This tool is not an official Okta tool, and is not officially supported.</p>
 
-						<h3>How it works (please read!)</h3>
+					<h3>How it works (please read!)</h3>
 
-						<p>When you submit the form, a back-end service will use Terraform to create all of the relevant objects in your Okta tenant. Click <a target="_blank" href="terraform_config.html">here</a> to see the Terraform configuration file that will be applied.</p>
+					<p>When you submit the form, a back-end service will use Terraform to create all of the relevant objects in your Okta tenant. Click <a target="_blank" href="terraform_config.html">here</a> to see the Terraform configuration file that will be applied.</p>
 
-						<p>You may want to take a moment to review the Terraform configuration to ensure that none of the created objects will conflict with an object that already exists in your Okta tenant. If Terraform sees that an object already exists, it will throw an error.</p>
+					<p>You may want to take a moment to review the Terraform configuration to ensure that none of the created objects will conflict with an object that already exists in your Okta tenant. If Terraform sees that an object already exists, it will throw an error.</p>
 
-						<p>If all goes well, the service will return a Terraform state object indicating the objects that it has created in your tenant.</p>
+					<p>If all goes well, the service will return a Terraform state object indicating the objects that it has created in your tenant.</p>
 
-						<p><b><i>Please note that this tool can only be used <u>once</u>. It cannot be used as an ongoing Terraform interface.</i></b></p>
+					<p><b><i>Please note that this tool can only be used <u>once</u>. It cannot be used as an ongoing Terraform interface.</i></b></p>
 
-						<p>Once you have the terraform state, you can of course use Terraform directly to manage your objects and tenant moving forward.</p>
+					<p>If the Terraform process fails, you can try manually deleting any/all objects with the same name as the ones that Terraform is trying to create, and try again.</p>
 
+					<p>Once you have the terraform state, you can of course use Terraform directly to manage your objects and tenant moving forward.</p>
+
+				</div>
+
+				<div class="col-6">
+
+					<form action = "" method = "">
+
+					<p>
+						okta org name: https:// <input type="text" name="okta_org_name" value="dev-638451" id="okta_org_name">
+						.
+						<select name="okta_base_url" id="okta_base_url">
+							<option value="okta.com" selected="selected">okta.com</option>
+							<option value="oktapreview.com">oktapreview.com</option>
+							<option value="okta-emea.com">okta-emea.com</option>
+						</select>
+					</p>
+
+					<p>okta api token: <input type = "text" name = "okta_api_token" id="okta_api_token" autocomplete="off" size=40></p>
+
+					<p>redirect_uri: <input type = "text" id="redirect_uri" value="http://localhost:8080" size=25></p>
+
+					</form>
+
+					<button onclick="submit_form()">submit</button>
+
+					<hr width="50%">
+					<div>
+						<p>A couple other notes:
+							<ul>
+								<li>The service will not store your API token. Again, this is a <i>one-time use</i> tool.</li>
+								<li>The redirect_uri will be used in creating the OIDC client in Okta. You can change it later in Okta if you wish.</li>
 					</div>
 
-					<div class="col-6">
+					<div id="user_msg"></div>
+					<button id='copyButton' style="display: none; margin-top: 10px; margin-bottom: 10px">copy</button>
+					<div id="tfstate"></div>
 
-						<form action = "" method = "">
-
-						<p>
-							okta org name: https:// <input type="text" name="okta_org_name" value="dev-638451" id="okta_org_name">
-							.
-							<select name="okta_base_url" id="okta_base_url">
-								<option value="okta.com" selected="selected">okta.com</option>
-								<option value="oktapreview.com">oktapreview.com</option>
-								<option value="okta-emea.com">okta-emea.com</option>
-							</select>
-						</p>
-
-						<p>okta api token: <input type = "text" name = "okta_api_token" id="okta_api_token" autocomplete="off" size=40></p>
-
-						<p>redirect_uri: <input type = "text" id="redirect_uri" value="http://localhost:8080" size=25></p>
-
-						</form>
-
-						<button onclick="submit_form()">submit</button>
-
-						<hr width="50%">
-						<div>
-							<p>A couple other notes:
-								<ul>
-									<li>The service will not store your API token. Again, this is a <i>one-time use</i> tool.</li>
-									<li>The redirect_uri will be used in creating the OIDC client in Okta. You can change it later in Okta if you wish.</li>
-						</div>
-
-						<div id="user_msg"></div>
-						<button id='copyButton' style="display: none; margin-top: 10px; margin-bottom: 10px">copy</button>
-						<div id="tfstate"></div>
-
-					</div>
+				</div>
+			</div>
 
 		</main><!-- /.container -->
 
